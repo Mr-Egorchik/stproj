@@ -12,5 +12,5 @@ import java.util.UUID;
 @MappedSuperclass
 public class BaseEntity {
     @Id
-    private UUID uuid;
+    private UUID id;
 }

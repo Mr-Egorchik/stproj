@@ -1,5 +1,6 @@
 package com.stproj.demo.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -7,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @Entity
@@ -23,6 +25,6 @@ public class Student extends BaseEntity {
     private String email;
     @ManyToOne
     @JoinColumn(name = "group_id")
-    private Group st_group;
+    private Group stGroup;
 
 }

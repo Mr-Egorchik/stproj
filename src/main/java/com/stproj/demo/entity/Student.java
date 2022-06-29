@@ -1,14 +1,18 @@
 package com.stproj.demo.entity;
 
-import javax.persistence.*;
-import java.util.UUID;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import javax.persistence.*;
+
+@NoArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "Student")
-public class Student {
+public class Student extends BaseEntity {
 
-    @Id
-    private UUID uuid;
     @Column(name = "name", nullable = false)
     private String name;
     @Column(name = "age", nullable = false)
@@ -19,56 +23,6 @@ public class Student {
     private String email;
     @ManyToOne
     @JoinColumn(name = "group_id")
-    private Group group;
+    private Group st_group;
 
-    public Student() {
-    }
-
-    public UUID getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Group getGroup() {
-        return group;
-    }
-
-    public void setGroup(Group group) {
-        this.group = group;
-    }
 }

@@ -6,7 +6,6 @@ import com.stproj.demo.repository.GroupRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,8 +17,7 @@ import java.util.UUID;
 public class GroupService {
 
     private final GroupRepository groupRepository;
-    @Autowired
-    private ModelMapper mapper;
+    private final ModelMapper mapper;
 
     @Transactional
     public void save(Group group) {

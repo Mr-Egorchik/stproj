@@ -1,42 +1,46 @@
 package com.stproj.demo.service;
 
+import com.stproj.demo.dto.GroupDto;
 import com.stproj.demo.entity.Group;
 import com.stproj.demo.repository.GroupRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.UUID;
 
+@RequiredArgsConstructor
 @Service
 public class GroupService {
 
-    @Autowired
     private final GroupRepository groupRepository;
+    private final ModelMapper mapper;
 
-    public GroupService(GroupRepository groupRepository) {
-        this.groupRepository = groupRepository;
-    }
-
+    @Transactional
     public void save(Group group) {
         groupRepository.save(group);
     }
 
-    public Group findById(UUID uuid) {
-        return groupRepository.findById(uuid).orElse(null);
+    @Transactional
+    public GroupDto findById(UUID uuid) {
+        Group group = groupRepository.findById(uuid).orElse(null);
+        return group == null ? null : mapper.map(group, GroupDto.class);
     }
 
-    public List<Group> findAll() {
-        return (List<Group>) groupRepository.findAll();
+    @Transactional
+    public List<GroupDto> findAll() {
+        return mapper.map(groupRepository.findAll(), new TypeToken<List<GroupDto>>(){}.getType());
     }
 
+    @Transactional
     public void delete(UUID uuid) {
-        if (!groupRepository.existsById(uuid))
-            throw new NoSuchElementException();
         groupRepository.deleteById(uuid);
     }
 
+    @Transactional
     public void deleteAll() {
         groupRepository.deleteAll();
     }

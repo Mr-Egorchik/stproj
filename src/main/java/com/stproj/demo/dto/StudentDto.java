@@ -1,8 +1,20 @@
 package com.stproj.demo.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 import java.util.UUID;
 
-public record StudentDto(UUID id, String name, int age, String phone, String email,
-                         UUID stGroupId) implements Serializable {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class StudentDto implements Serializable {
+    private UUID id;
+    private String name;
+    private int age;
+    private String phone;
+    private String email;
+    private UUID stGroupId;
 }

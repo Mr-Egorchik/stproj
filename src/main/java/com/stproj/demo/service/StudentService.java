@@ -3,22 +3,20 @@ package com.stproj.demo.service;
 import com.stproj.demo.dto.StudentDto;
 import com.stproj.demo.entity.Student;
 import com.stproj.demo.repository.StudentRepository;
-import com.stproj.demo.service.mapping.StudentMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@RequiredArgsConstructor
 @Service
 public class StudentService {
 
-    @Autowired
-    private StudentRepository studentRepository;
-    @Autowired
-    private StudentMapper studentMapper;
+    private final StudentRepository studentRepository;
 
     @Transactional
     public void save(Student student) {
@@ -29,19 +27,12 @@ public class StudentService {
     @Transactional
     public StudentDto findById(UUID uuid) {
         Student student = studentRepository.findById(uuid).orElse(null);
-        if (student == null) {
-            return null;
-        }
-        return studentMapper.entityToDto(student);
+        return student == null ? null : new ModelMapper().map(student, StudentDto.class);
     }
 
     @Transactional
     public List<StudentDto> findAll() {
-        List<StudentDto> students = new ArrayList<>();
-        for (Student student: studentRepository.findAll()) {
-            students.add(studentMapper.entityToDto(student));
-        }
-        return students;
+        return new ModelMapper().map(studentRepository.findAll(), new TypeToken<List<StudentDto>>(){}.getType());
     }
 
     @Transactional

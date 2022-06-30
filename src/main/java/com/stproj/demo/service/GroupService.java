@@ -3,22 +3,20 @@ package com.stproj.demo.service;
 import com.stproj.demo.dto.GroupDto;
 import com.stproj.demo.entity.Group;
 import com.stproj.demo.repository.GroupRepository;
-import com.stproj.demo.service.mapping.GroupMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@RequiredArgsConstructor
 @Service
 public class GroupService {
 
-    @Autowired
     private GroupRepository groupRepository;
-    @Autowired
-    private GroupMapper groupMapper;
 
     @Transactional
     public void save(Group group) {
@@ -29,19 +27,12 @@ public class GroupService {
     @Transactional
     public GroupDto findById(UUID uuid) {
         Group group = groupRepository.findById(uuid).orElse(null);
-        if (group == null) {
-            return null;
-        }
-        return groupMapper.entityToDto(group);
+        return group == null ? null : new ModelMapper().map(group, GroupDto.class);
     }
 
     @Transactional
     public List<GroupDto> findAll() {
-        List<GroupDto> groups = new ArrayList<>();
-        for (Group group: groupRepository.findAll()) {
-            groups.add(groupMapper.entityToDto(group));
-        }
-        return groups;
+        return new ModelMapper().map(groupRepository.findAll(), new TypeToken<List<GroupDto>>(){}.getType());
     }
 
     @Transactional

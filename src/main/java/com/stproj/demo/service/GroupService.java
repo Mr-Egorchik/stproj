@@ -6,6 +6,7 @@ import com.stproj.demo.repository.GroupRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,23 +17,24 @@ import java.util.UUID;
 @Service
 public class GroupService {
 
-    private GroupRepository groupRepository;
+    private final GroupRepository groupRepository;
+    @Autowired
+    private ModelMapper mapper;
 
     @Transactional
     public void save(Group group) {
-        group.setId(UUID.randomUUID());
         groupRepository.save(group);
     }
 
     @Transactional
     public GroupDto findById(UUID uuid) {
         Group group = groupRepository.findById(uuid).orElse(null);
-        return group == null ? null : new ModelMapper().map(group, GroupDto.class);
+        return group == null ? null : mapper.map(group, GroupDto.class);
     }
 
     @Transactional
     public List<GroupDto> findAll() {
-        return new ModelMapper().map(groupRepository.findAll(), new TypeToken<List<GroupDto>>(){}.getType());
+        return mapper.map(groupRepository.findAll(), new TypeToken<List<GroupDto>>(){}.getType());
     }
 
     @Transactional

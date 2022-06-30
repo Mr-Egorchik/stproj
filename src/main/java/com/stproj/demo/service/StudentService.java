@@ -6,6 +6,7 @@ import com.stproj.demo.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,22 +18,23 @@ import java.util.UUID;
 public class StudentService {
 
     private final StudentRepository studentRepository;
+    @Autowired
+    private ModelMapper mapper;
 
     @Transactional
     public void save(Student student) {
-        student.setId(UUID.randomUUID());
         studentRepository.save(student);
     }
 
     @Transactional
     public StudentDto findById(UUID uuid) {
         Student student = studentRepository.findById(uuid).orElse(null);
-        return student == null ? null : new ModelMapper().map(student, StudentDto.class);
+        return student == null ? null : mapper.map(student, StudentDto.class);
     }
 
     @Transactional
     public List<StudentDto> findAll() {
-        return new ModelMapper().map(studentRepository.findAll(), new TypeToken<List<StudentDto>>(){}.getType());
+        return mapper.map(studentRepository.findAll(), new TypeToken<List<StudentDto>>(){}.getType());
     }
 
     @Transactional

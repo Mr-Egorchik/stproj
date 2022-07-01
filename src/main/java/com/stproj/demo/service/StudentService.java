@@ -6,6 +6,7 @@ import com.stproj.demo.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +34,11 @@ public class StudentService {
     @Transactional
     public List<StudentDto> findAll() {
         return mapper.map(studentRepository.findAll(), new TypeToken<List<StudentDto>>(){}.getType());
+    }
+
+    @Transactional
+    public List<StudentDto> findAll(Pageable pageable) {
+        return mapper.map(studentRepository.findAll(pageable).getContent(), new TypeToken<List<StudentDto>>(){}.getType());
     }
 
     @Transactional

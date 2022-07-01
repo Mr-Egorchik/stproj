@@ -5,6 +5,7 @@ import com.stproj.demo.entity.Group;
 import com.stproj.demo.service.GroupService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -40,7 +41,7 @@ public class GroupController {
         return ResponseEntity.ok(group);
     }
     @GetMapping("")
-    public ResponseEntity<List<GroupDto>> findAllGroups(Pageable pageable) {
+    public ResponseEntity<List<GroupDto>> findAllGroups(@ParameterObject Pageable pageable) {
         List<GroupDto> groups = groupService.findAll(pageable);
         return ResponseEntity.ok(groups);
     }

@@ -5,6 +5,7 @@ import com.stproj.demo.entity.Student;
 import com.stproj.demo.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -42,7 +43,7 @@ public class StudentController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<StudentDto>> findAllStudents(Pageable pageable) {
+    public ResponseEntity<List<StudentDto>> findAllStudents(@ParameterObject Pageable pageable) {
         List<StudentDto> students = studentService.findAll(pageable);
         return ResponseEntity.ok(students);
     }

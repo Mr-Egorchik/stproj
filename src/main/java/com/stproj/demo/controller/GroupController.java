@@ -3,8 +3,11 @@ package com.stproj.demo.controller;
 import com.stproj.demo.dto.GroupDto;
 import com.stproj.demo.entity.Group;
 import com.stproj.demo.service.GroupService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,12 +16,12 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/group")
 public class GroupController {
-    @Autowired
-    private GroupService groupService;
-    @Autowired
-    private ModelMapper mapper;
+
+    private final GroupService groupService;
+    private final ModelMapper mapper;
 
     @PostMapping("/")
     public ResponseEntity<GroupDto> saveGroup(@RequestBody GroupDto group) {
@@ -35,9 +38,9 @@ public class GroupController {
         GroupDto group = groupService.findById(id);
         return ResponseEntity.ok(group);
     }
-    @GetMapping("/")
-    public ResponseEntity<List<GroupDto>> findAllGroups() {
-        List<GroupDto> groups = groupService.findAll();
+    @GetMapping("")
+    public ResponseEntity<List<GroupDto>> findAllGroups(@RequestParam("page") int page, @RequestParam("size") int size) {
+        List<GroupDto> groups = groupService.findAll(PageRequest.of(page, size, Sort.by(Sort.Order.asc("number"))));
         return ResponseEntity.ok(groups);
     }
 }

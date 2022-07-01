@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,8 +40,8 @@ public class GroupController {
         return ResponseEntity.ok(group);
     }
     @GetMapping("")
-    public ResponseEntity<List<GroupDto>> findAllGroups(@RequestParam("page") int page, @RequestParam("size") int size) {
-        List<GroupDto> groups = groupService.findAll(PageRequest.of(page, size, Sort.by(Sort.Order.asc("number"))));
+    public ResponseEntity<List<GroupDto>> findAllGroups(Pageable pageable) {
+        List<GroupDto> groups = groupService.findAll(pageable);
         return ResponseEntity.ok(groups);
     }
 }

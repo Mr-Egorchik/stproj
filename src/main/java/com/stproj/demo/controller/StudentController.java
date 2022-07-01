@@ -6,6 +6,7 @@ import com.stproj.demo.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,8 +42,8 @@ public class StudentController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<StudentDto>> findAllStudents(@RequestParam("page") int page, @RequestParam("size") int size) {
-        List<StudentDto> students = studentService.findAll(PageRequest.of(page, size, Sort.by(Sort.Order.asc("stGroup.number"), Sort.Order.asc("name"))));
+    public ResponseEntity<List<StudentDto>> findAllStudents(Pageable pageable) {
+        List<StudentDto> students = studentService.findAll(pageable);
         return ResponseEntity.ok(students);
     }
 }

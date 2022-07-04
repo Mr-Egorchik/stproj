@@ -3,6 +3,7 @@ package com.stproj.demo.service;
 import com.stproj.demo.dto.GroupDto;
 import com.stproj.demo.entity.Group;
 import com.stproj.demo.repository.GroupRepository;
+import com.stproj.demo.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -11,6 +12,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -50,6 +52,18 @@ public class GroupService {
     @Transactional
     public List<GroupDto> getGroupsWithMoreThanTenStudentsJPQL() {
         return mapper.map(groupRepository.getGroupsWithMoreThanTenStudentsJPQL(), new TypeToken<List<GroupDto>>(){}.getType());
+    }
+
+    @Transactional
+    public List<GroupDto> getGroupsWithMoreThanTenStudentsCrud() {
+        Iterable<Group> allGroups = groupRepository.findAll();
+        List<Group> groups = new ArrayList<>();
+        allGroups.forEach(group -> {
+            if (group.getStudents().size() > 10) {
+                groups.add(group);
+            }
+        });
+        return mapper.map(groups, new TypeToken<List<GroupDto>>(){}.getType());
     }
 
     @Transactional

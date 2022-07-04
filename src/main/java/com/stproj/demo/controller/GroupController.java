@@ -63,8 +63,14 @@ public class GroupController {
         return ResponseEntity.ok(groups);
     }
 
-    @GetMapping("/more_than_ten_students_specification")
+    @GetMapping("/more_than_ten_students_crud")
     public ResponseEntity<List<GroupDto>> getGroupsWithMoreThanTenStudentsCrud() {
+        List<GroupDto> groups = groupService.getGroupsWithMoreThanTenStudentsCrud();
+        return ResponseEntity.ok(groups);
+    }
+
+    @GetMapping("/more_than_ten_students_specification")
+    public ResponseEntity<List<GroupDto>> getGroupsWithMoreThanTenStudentsSpecification() {
         List<GroupDto> groups = groupService.getGroupsWithMoreThanTenStudentsSpecification(new GroupSpecification());
         return ResponseEntity.ok(groups);
     }

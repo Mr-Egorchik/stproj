@@ -14,10 +14,5 @@ spring:
     properties:
       hibernate:
         show_sql: true
-logging:
-  rollingPolicy: org.apache.log4j.rolling.TimeBasedRollingPolicy
-  file:
-    path: ./logs
-    max_size: 100 MB
 server:
   port: 9090

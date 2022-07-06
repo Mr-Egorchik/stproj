@@ -3,17 +3,22 @@ package com.stproj.demo.controller;
 import com.stproj.demo.dto.GroupDto;
 import com.stproj.demo.entity.Group;
 import com.stproj.demo.service.GroupService;
+import com.stproj.demo.specification.GroupSpecification;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.criterion.CriteriaQuery;
+import org.hibernate.loader.criteria.CriteriaQueryTranslator;
 import org.modelmapper.ModelMapper;
 import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 import java.util.UUID;
 
@@ -45,4 +50,31 @@ public class GroupController {
         List<GroupDto> groups = groupService.findAll(pageable);
         return ResponseEntity.ok(groups);
     }
+
+    @GetMapping("/more_than_ten_students_native")
+    public ResponseEntity<List<GroupDto>> getGroupsWithMoreThanTenStudentsNative() {
+        List<GroupDto> groups = groupService.getGroupsWithMoreThanTenStudentsNative();
+        return ResponseEntity.ok(groups);
+    }
+
+    @GetMapping("/more_than_ten_students_jpql")
+    public ResponseEntity<List<GroupDto>> getGroupsWithMoreThanTenStudentsJPQL() {
+        List<GroupDto> groups = groupService.getGroupsWithMoreThanTenStudentsJPQL();
+        return ResponseEntity.ok(groups);
+    }
+
+    @GetMapping("/more_than_ten_students_crud")
+    public ResponseEntity<List<GroupDto>> getGroupsWithMoreThanTenStudentsCrud() {
+        List<GroupDto> groups = groupService.getGroupsWithMoreThanTenStudentsCrud();
+        return ResponseEntity.ok(groups);
+    }
+
+    @GetMapping("/more_than_ten_students_specification")
+    public ResponseEntity<List<GroupDto>> getGroupsWithMoreThanTenStudentsSpecification() {
+        List<GroupDto> groups = groupService.getGroupsWithMoreThanTenStudentsSpecification(new GroupSpecification());
+        return ResponseEntity.ok(groups);
+    }
+
+
+
 }

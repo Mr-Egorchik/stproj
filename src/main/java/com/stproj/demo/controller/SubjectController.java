@@ -32,7 +32,6 @@ public class SubjectController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @Cacheable("name")
     @GetMapping("")
     public ResponseEntity<List<SubjectDto>> findAllSubjects(@ParameterObject Pageable pageable) {
         log.info("Start finding subjects: page - " + pageable.getPageNumber() + ", size - " + pageable.getPageSize() + ", sort - " + pageable.getSort());

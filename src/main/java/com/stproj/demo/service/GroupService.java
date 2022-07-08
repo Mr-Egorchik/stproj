@@ -3,7 +3,6 @@ package com.stproj.demo.service;
 import com.stproj.demo.dto.GroupDto;
 import com.stproj.demo.entity.Group;
 import com.stproj.demo.repository.GroupRepository;
-import com.stproj.demo.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;

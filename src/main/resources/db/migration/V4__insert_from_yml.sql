@@ -1,0 +1,1 @@
+insert into journal values ('${journal.name}', '${journal.start}', '${journal.country}');

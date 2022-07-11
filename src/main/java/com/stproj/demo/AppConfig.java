@@ -8,6 +8,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,23 +18,24 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @Configuration
 @EnableCaching
 @EnableScheduling
+@EnableConfigurationProperties
 @RequiredArgsConstructor
 public class AppConfig {
 
     private final JournalRepository journalRepository;
-    @Value("${journal.name}")
-    private String name;
-    @Value("${journal.start}")
-    private int start;
-    @Value("${journal.country}")
-    private String country;
+
     @Bean
     public ModelMapper modelMapper() {
         return new ModelMapper();
     }
 
     @Bean
+    @ConfigurationProperties(prefix = "journal")
+    public Journal journal() {
+        return new Journal();
+    }
+    @Bean
     InitializingBean saveToDb() {
-        return () -> journalRepository.save(new Journal(name, start, country));
+        return () -> journalRepository.save(journal());
     }
 }

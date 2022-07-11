@@ -15,7 +15,7 @@ spring:
       hibernate:
         show_sql: true
 journal:
-  name: Computer_Optics
+  name: Computer Optics
   start: 2016
   country: Russia
 server:

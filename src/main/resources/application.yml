@@ -14,11 +14,9 @@ spring:
     properties:
       hibernate:
         show_sql: true
-  flyway:
-    placeholders:
-      journal:
-        name: Computer_Optics
-        start: 2016
-        country: Russia
+journal:
+  name: Computer_Optics
+  start: 2016
+  country: Russia
 server:
   port: 9090

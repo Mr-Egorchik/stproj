@@ -10,8 +10,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GroupResponseDto {
-    private int errorCode;
-    private List<StudentDto> data;
+    private String errorCode;
+    private List<GroupDto> data;
     private int totalPages;
     private int totalElements;
     private int currentPage;

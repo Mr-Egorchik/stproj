@@ -7,6 +7,7 @@ import com.stproj.demo.repository.GroupRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -28,16 +29,16 @@ public class GroupService {
     @Transactional
     public GroupResponseDto save(Group group) {
         Group savedGroup = groupRepository.save(group);
-        return new GroupResponseDto(HttpStatus.OK.toString(), mapper.map(List.of(savedGroup), new TypeToken<List<GroupDto>>(){}.getType()), 1, 1, 0);
+        return new GroupResponseDto("", mapper.map(List.of(savedGroup), new TypeToken<List<GroupDto>>(){}.getType()), 1, 1, 0);
     }
 
     @Transactional
     public GroupResponseDto findById(UUID uuid) {
         Group group = groupRepository.findById(uuid).orElse(null);
         if (group == null) {
-            return new GroupResponseDto(HttpStatus.OK.toString(), new ArrayList<>(), 1, 0, 0);
+            return new GroupResponseDto("NO_DATA_FOUND", new ArrayList<>(), 0, 0, 0);
         }
-        return new GroupResponseDto(HttpStatus.OK.toString(), List.of(mapper.map(group, GroupDto.class)), 1, 1, 0);
+        return new GroupResponseDto("", List.of(mapper.map(group, GroupDto.class)), 1, 1, 0);
     }
 
     @Transactional
@@ -48,19 +49,19 @@ public class GroupService {
     @Transactional
     public GroupResponseDto findAll(Pageable pageable) {
         Page<Group> page = groupRepository.findAll(pageable);
-        return new GroupResponseDto(HttpStatus.OK.toString(), mapper.map(page.getContent(), new TypeToken<List<GroupDto>>(){}.getType()), page.getTotalPages(), page.getTotalElements(), pageable.getPageNumber());
+        return new GroupResponseDto(page.getContent().size() == 0 ? "NO_DATA_FOUND" : "", mapper.map(page.getContent(), new TypeToken<List<GroupDto>>(){}.getType()), page.getTotalPages(), page.getTotalElements(), pageable.getPageNumber());
     }
 
     @Transactional
-    public GroupResponseDto getGroupsWithMoreThanTenStudentsNative() {
-        List<GroupDto> groups = mapper.map(groupRepository.getGroupsWithMoreThanTenStudentsNative(), new TypeToken<List<GroupDto>>(){}.getType());
-        return new GroupResponseDto(HttpStatus.OK.toString(), groups, 1, groups.size(), 0);
+    public GroupResponseDto getGroupsWithMoreThanTenStudentsNative(Pageable pageable) {
+        Page<Group> page = groupRepository.getGroupsWithMoreThanTenStudentsNative(pageable);
+        return new GroupResponseDto(page.getContent().size() == 0 ? "NO_DATA_FOUND" : "", mapper.map(page.getContent(), new TypeToken<List<GroupDto>>(){}.getType()), page.getTotalPages(), page.getTotalElements(), pageable.getPageNumber());
     }
 
     @Transactional
-    public GroupResponseDto getGroupsWithMoreThanTenStudentsJPQL() {
-        List<GroupDto> groups = mapper.map(groupRepository.getGroupsWithMoreThanTenStudentsJPQL(), new TypeToken<List<GroupDto>>(){}.getType());
-        return new GroupResponseDto(HttpStatus.OK.toString(), groups, 1, groups.size(), 0);
+    public GroupResponseDto getGroupsWithMoreThanTenStudentsJPQL(Pageable pageable) {
+        Page<Group> page = groupRepository.getGroupsWithMoreThanTenStudentsJPQL(pageable);
+        return new GroupResponseDto(page.getContent().size() == 0 ? "NO_DATA_FOUND" : "", mapper.map(page.getContent(), new TypeToken<List<GroupDto>>(){}.getType()), page.getTotalPages(), page.getTotalElements(), pageable.getPageNumber());
     }
 
     @Transactional
@@ -76,9 +77,9 @@ public class GroupService {
     }
 
     @Transactional
-    public GroupResponseDto getGroupsWithMoreThanTenStudentsSpecification(Specification<Group> specification) {
-        List<GroupDto> groups = mapper.map(groupRepository.findAll(specification), new TypeToken<List<GroupDto>>(){}.getType());
-        return new GroupResponseDto(HttpStatus.OK.toString(), groups, 1, groups.size(), 0);
+    public GroupResponseDto getGroupsWithMoreThanTenStudentsSpecification(Specification<Group> specification, Pageable pageable) {
+        Page<Group> page = groupRepository.findAll(specification, pageable);
+        return new GroupResponseDto(page.getContent().size() == 0 ? "NO_DATA_FOUND" : "", mapper.map(page.getContent(), new TypeToken<List<GroupDto>>(){}.getType()), page.getTotalPages(), page.getTotalElements(), pageable.getPageNumber());
     }
     @Transactional
     public void delete(UUID uuid) {

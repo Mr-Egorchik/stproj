@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,11 +27,11 @@ public class GroupController {
     private final ModelMapper mapper;
 
     @PostMapping("/")
-    public GroupResponseDto saveGroup(@RequestBody GroupDto group) {
+    public ResponseEntity<GroupResponseDto> saveGroup(@RequestBody GroupDto group) {
         log.info("Start saving group...");
         GroupResponseDto response = groupService.save(mapper.map(group, Group.class));
         log.info("Group is saved");
-        return response;
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
@@ -44,52 +43,43 @@ public class GroupController {
     }
 
     @GetMapping("/{id}")
-    public GroupResponseDto findGroupById(@PathVariable("id") UUID id) {
+    public ResponseEntity<GroupResponseDto> findGroupById(@PathVariable("id") UUID id) {
         log.info("Start finding group...");
         GroupResponseDto response = groupService.findById(id);
         log.info("Group is found");
-        return response;
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("")
-    public GroupResponseDto findAllGroups(@ParameterObject Pageable pageable) {
+    public ResponseEntity<GroupResponseDto> findAllGroups(@ParameterObject Pageable pageable) {
         log.info("Start finding groups: page - " + pageable.getPageNumber() + ", size - " + pageable.getPageSize() + ", sort - " + pageable.getSort());
         GroupResponseDto response = groupService.findAll(pageable);
         log.info("All groups are found");
-        return response;
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/more_than_ten_students_native")
-    public GroupResponseDto getGroupsWithMoreThanTenStudentsNative() {
+    public ResponseEntity<GroupResponseDto> getGroupsWithMoreThanTenStudentsNative(@ParameterObject Pageable pageable) {
         log.info("NATIVE Start finding all groups with more than 10 students...");
-        GroupResponseDto response = groupService.getGroupsWithMoreThanTenStudentsNative();
+        GroupResponseDto response = groupService.getGroupsWithMoreThanTenStudentsNative(pageable);
         log.info("All groups with more than 10 students are found");
-        return response;
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/more_than_ten_students_jpql")
-    public GroupResponseDto getGroupsWithMoreThanTenStudentsJPQL() {
+    public ResponseEntity<GroupResponseDto> getGroupsWithMoreThanTenStudentsJPQL(@ParameterObject Pageable pageable) {
         log.info("JPQL Start finding all groups with more than 10 students...");
-        GroupResponseDto response = groupService.getGroupsWithMoreThanTenStudentsJPQL();
+        GroupResponseDto response = groupService.getGroupsWithMoreThanTenStudentsJPQL(pageable);
         log.info("All groups with more than 10 students are found");
-        return response;
-    }
-
-    @GetMapping("/more_than_ten_students_crud")
-    public GroupResponseDto getGroupsWithMoreThanTenStudentsCrud() {
-        List<GroupDto> groups = groupService.getGroupsWithMoreThanTenStudentsCrud();
-        log.info("All groups with more than 10 students are found");
-        return new GroupResponseDto(HttpStatus.OK.toString(), groups, 1, groups.size(), 1);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/more_than_ten_students_specification")
-    public GroupResponseDto getGroupsWithMoreThanTenStudentsSpecification() {
+    public ResponseEntity<GroupResponseDto> getGroupsWithMoreThanTenStudentsSpecification(@ParameterObject Pageable pageable) {
         log.info("SPECIFICATION Start finding all groups with more than 10 students...");
-        GroupResponseDto response = groupService.getGroupsWithMoreThanTenStudentsSpecification(new GroupSpecification());
+        GroupResponseDto response = groupService.getGroupsWithMoreThanTenStudentsSpecification(new GroupSpecification(), pageable);
         log.info("All groups with more than 10 students are found");
-        return response;
+        return ResponseEntity.ok(response);
     }
-
-
 
 }

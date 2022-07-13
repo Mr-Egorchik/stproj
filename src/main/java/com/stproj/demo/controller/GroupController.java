@@ -1,6 +1,7 @@
 package com.stproj.demo.controller;
 
 import com.stproj.demo.dto.GroupDto;
+import com.stproj.demo.dto.GroupResponseDto;
 import com.stproj.demo.entity.Group;
 import com.stproj.demo.service.GroupService;
 import com.stproj.demo.specification.GroupSpecification;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,12 +28,13 @@ public class GroupController {
     private final ModelMapper mapper;
 
     @PostMapping("/")
-    public ResponseEntity<GroupDto> saveGroup(@RequestBody GroupDto group) {
+    public GroupResponseDto saveGroup(@RequestBody GroupDto group) {
         log.info("Start saving group...");
-        groupService.save(mapper.map(group, Group.class));
+        GroupResponseDto response = groupService.save(mapper.map(group, Group.class));
         log.info("Group is saved");
-        return new ResponseEntity<>(HttpStatus.OK);
+        return response;
     }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<GroupDto> deleteGroup(@PathVariable("id") UUID id) {
         log.info("Start deleting group...");
@@ -39,50 +42,52 @@ public class GroupController {
         log.info("Group is deleted");
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
     @GetMapping("/{id}")
-    public ResponseEntity<GroupDto> findGroupById(@PathVariable("id") UUID id) {
+    public GroupResponseDto findGroupById(@PathVariable("id") UUID id) {
         log.info("Start finding group...");
-        GroupDto group = groupService.findById(id);
+        GroupResponseDto response = groupService.findById(id);
         log.info("Group is found");
-        return ResponseEntity.ok(group);
+        return response;
     }
+
     @GetMapping("")
-    public ResponseEntity<List<GroupDto>> findAllGroups(@ParameterObject Pageable pageable) {
+    public GroupResponseDto findAllGroups(@ParameterObject Pageable pageable) {
         log.info("Start finding groups: page - " + pageable.getPageNumber() + ", size - " + pageable.getPageSize() + ", sort - " + pageable.getSort());
-        List<GroupDto> groups = groupService.findAll(pageable);
+        GroupResponseDto response = groupService.findAll(pageable);
         log.info("All groups are found");
-        return ResponseEntity.ok(groups);
+        return response;
     }
 
     @GetMapping("/more_than_ten_students_native")
-    public ResponseEntity<List<GroupDto>> getGroupsWithMoreThanTenStudentsNative() {
+    public GroupResponseDto getGroupsWithMoreThanTenStudentsNative() {
         log.info("NATIVE Start finding all groups with more than 10 students...");
-        List<GroupDto> groups = groupService.getGroupsWithMoreThanTenStudentsNative();
+        GroupResponseDto response = groupService.getGroupsWithMoreThanTenStudentsNative();
         log.info("All groups with more than 10 students are found");
-        return ResponseEntity.ok(groups);
+        return response;
     }
 
     @GetMapping("/more_than_ten_students_jpql")
-    public ResponseEntity<List<GroupDto>> getGroupsWithMoreThanTenStudentsJPQL() {
+    public GroupResponseDto getGroupsWithMoreThanTenStudentsJPQL() {
         log.info("JPQL Start finding all groups with more than 10 students...");
-        List<GroupDto> groups = groupService.getGroupsWithMoreThanTenStudentsJPQL();
+        GroupResponseDto response = groupService.getGroupsWithMoreThanTenStudentsJPQL();
         log.info("All groups with more than 10 students are found");
-        return ResponseEntity.ok(groups);
+        return response;
     }
 
     @GetMapping("/more_than_ten_students_crud")
-    public ResponseEntity<List<GroupDto>> getGroupsWithMoreThanTenStudentsCrud() {
+    public GroupResponseDto getGroupsWithMoreThanTenStudentsCrud() {
         List<GroupDto> groups = groupService.getGroupsWithMoreThanTenStudentsCrud();
         log.info("All groups with more than 10 students are found");
-        return ResponseEntity.ok(groups);
+        return new GroupResponseDto(HttpStatus.OK.toString(), groups, 1, groups.size(), 1);
     }
 
     @GetMapping("/more_than_ten_students_specification")
-    public ResponseEntity<List<GroupDto>> getGroupsWithMoreThanTenStudentsSpecification() {
+    public GroupResponseDto getGroupsWithMoreThanTenStudentsSpecification() {
         log.info("SPECIFICATION Start finding all groups with more than 10 students...");
-        List<GroupDto> groups = groupService.getGroupsWithMoreThanTenStudentsSpecification(new GroupSpecification());
+        GroupResponseDto response = groupService.getGroupsWithMoreThanTenStudentsSpecification(new GroupSpecification());
         log.info("All groups with more than 10 students are found");
-        return ResponseEntity.ok(groups);
+        return response;
     }
 
 

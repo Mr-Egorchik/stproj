@@ -13,6 +13,6 @@ public class GroupResponseDto {
     private String errorCode;
     private List<GroupDto> data;
     private int totalPages;
-    private int totalElements;
+    private long totalElements;
     private int currentPage;
 }
